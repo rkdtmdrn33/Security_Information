@@ -88,9 +88,8 @@ def filter_poc(poc_data): # feed 필터링 부분
         matches = cve_pattern.findall(poc_descriptions) # CVE 추출
         
         if not matches:
-            a=1
+            pass
         else:
-            print(matches)
             print(index["poc_name"])
             print(index["poc_descriptions"])
             print(index["poc_url"])
