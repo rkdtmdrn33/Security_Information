@@ -44,3 +44,95 @@ Flatpak
 pgAdmin
 Tenda
 Windows
+Apache Ambari
+Apache Avro
+Apache Cassandra
+Apache Commons BeanUtils
+Apache Commons Configuration
+Apache Commons IO
+Apache Commons VFS
+Apache CXF
+Apache Hive
+Apache HTTP Server
+Apache James Mime4J
+Apache Kafka Clients
+Apache Log4j
+Apache MINA Core
+Apache MINA SSHD
+Apache Oozie
+Apache Parquet
+Apache POI
+Apache Ranger
+Apache Subversion
+Apache Tomcat
+Apache Zeppelin
+BIND9
+BIG-IP
+Catalyst 8300 Series Edge uCPE
+Cisco 5000 Series ENCS
+Cisco APIC
+Cisco IOS XE
+Cisco IOS XR
+Cisco NX-OS
+Cisco UCS C-Series Rack Servers
+Cisco UCS E-Series Servers
+Cisco UCS S-Series Servers
+CPython
+cups-browsed
+cups-filters
+FortiADC
+FortiAnalyzer
+FortiAnalyzer Cloud
+FortiAuthenticator
+FortiDDoS
+FortiDDoS-F
+FortiMail
+FortiManager
+FortiManager Cloud
+FortiNDR
+FortiOS
+FortiPAM
+FortiPortal
+FortiProxy
+FortiRecorder
+FortiSASE
+FortiSOAR
+FortiSwitch
+FortiSwitchManager
+FortiTester
+FortiVoice
+FortiWLC
+FortiWeb
+GNU
+Google Chrom
+Java
+Junos OS
+libcupsfilters
+libppd
+Linux Kernel
+Linux Kernel netfilter
+MDS 9000
+MySQL Connectors
+MySQL NDB Cluster
+MySQL Server
+Nexus 3000
+Nexus 5500
+Nexus 5600
+Nexus 6000
+Nexus 7000
+Nexus 9000
+Node.js
+Node.js HTTP/2
+NVMe/TCP
+OpenPrinting CUPS
+OpenSSH
+RFC 2865 RADIUS Protocol
+Sniper
+Splunk Enterprise
+Subversion
+VMware Cloud Foundation
+VMware vCenter Server
+VMware vSphere ESXi
+Windows Hyper-V
+Windows Reliable Multicast Transport Driver
+Windows Server
