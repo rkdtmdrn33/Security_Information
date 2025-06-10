@@ -18,8 +18,9 @@ filter_keywords = [
 
 def get_poc():
     poc_data = []
-
-    keyword = "PoC CVE-2025-", # 검색 키워드 (name,full_name,description)
+    
+    keyword_year = datetime.now().year
+    keyword = f"PoC CVE-{keyword_year}-", # 검색 키워드 (name,full_name,description)
     # date_str = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d') # 금일 날짜
     since_date = None, # 날짜(2025-05-30)
 
@@ -97,7 +98,7 @@ def filter_poc(poc_data): # feed 필터링 부분
                 "poc_url": index["poc_url"],
                 "poc_updated": index["poc_updated"],
             })
-            
+
     return poc_result
 
 def poc_main():

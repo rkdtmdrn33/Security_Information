@@ -97,23 +97,19 @@ def filtered_cve(): # Keywords 기반 CVE 정보 Filtering
                 'references' : [reference.url for reference in cve.references],
                 'cwe' : [cwe.value for cwe in cve.cwe]
             })
+    return filtered_cves
 
     # 결과 출력
-    for item in filtered_cves:
-        keywords_str = ','.join(k.upper() for k in item['matched_keywords'])
-        print("\n======================================================\n")
-        print(f"Filtered by [{keywords_str}]\n")
-        print(f"{item['id']}\n")
-        print(f"published: {item['published']}\n")
-        print(f"lastModified: {item['lastModified']}\n")
-        print(f"cvssMetricv31: {item['cvssMetricv31']}\n")
-        print(f"descriptions: {item['descriptions']}\n")
-        print(f"references: {item['references']}\n")
-        print(f"CWE: {item['cwe']}")
-
-    print(f"\n총 {len(filtered_cves)}개의 CVE가 필터링되었습니다.")    
-
-    return
-
-if __name__ == "__main__":
-    filtered_cve()
+    # for item in filtered_cves:
+    #     keywords_str = ','.join(k.upper() for k in item['matched_keywords'])
+    #     print("\n======================================================\n")
+    #     print(f"Filtered by [{keywords_str}]\n")
+    #     print(f"{item['id']}\n")
+    #     print(f"published: {item['published']}\n")
+    #     print(f"lastModified: {item['lastModified']}\n")
+    #     print(f"cvssMetricv31: {item['cvssMetricv31']}\n")
+    #     print(f"descriptions: {item['descriptions']}\n")
+    #     print(f"references: {item['references']}\n")
+    #     print(f"CWE: {item['cwe']}")
+    # print(f"\n총 {len(filtered_cves)}개의 CVE가 필터링되었습니다.")    
+    # return
