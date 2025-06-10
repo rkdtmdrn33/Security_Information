@@ -3,7 +3,6 @@ import requests
 import json
 import re
 
-
 ### --- 모듈 추가 --- ###
 # pip install requests
 # dateutil, json
@@ -82,6 +81,7 @@ def get_poc():
 
 def filter_poc(poc_data): # feed 필터링 부분
     cve_pattern = re.compile(r"\bCVE-\d{4}-\d{4,}\b", re.IGNORECASE) # CVE형식 추출
+    poc_result = []
 
     for index in poc_data:
         poc_descriptions = index["poc_descriptions"]
@@ -90,18 +90,17 @@ def filter_poc(poc_data): # feed 필터링 부분
         if not matches:
             pass
         else:
-            print(index["poc_name"])
-            print(index["poc_descriptions"])
-            print(index["poc_url"])
-            print(index["poc_updated"])
-            print("")
-    return 
+            poc_result.append({
+                "poc_cve": matches,
+                "poc_name": index["poc_name"],
+                "poc_descriptions": index["poc_descriptions"],
+                "poc_url": index["poc_url"],
+                "poc_updated": index["poc_updated"],
+            })
+            
+    return poc_result
 
-def main():
+def poc_main():
     poc_data = get_poc()
     result = filter_poc(poc_data)
-    
-    # print(poc[10]["poc_name"])
-
-if __name__ == "__main__":
-    main()
+    return result
