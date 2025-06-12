@@ -94,7 +94,7 @@ def filtered_cve(): # Keywords 기반 CVE 정보 Filtering
                 'lastModified': cve.lastModified,
                 'descriptions': cve.descriptions[0].value,
                 'cvssMetricv31' : cve.metrics.cvssMetricV31[0].cvssData.baseScore,
-                'references' : [reference.url for reference in cve.references],
+                'references' : cve.url,
                 'cwe' : [cwe.value for cwe in cve.cwe]
             })
     return filtered_cves
