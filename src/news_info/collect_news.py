@@ -6,7 +6,10 @@ from datetime import datetime, timedelta, timezone
 
 def get_csv_path(filename):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(BASE_DIR, 'csv_data', filename)
+    csv_dir = os.path.join(BASE_DIR, 'csv_data')
+    if not os.path.exists(csv_dir):
+        os.makedirs(csv_dir)
+    return os.path.join(csv_dir,filename)
 
 def read_feed_urls():
     csv_path = get_csv_path('news_url.csv')
@@ -22,7 +25,7 @@ def read_keywords():
     csv_path = get_csv_path('news_word.csv')
     keywords = []
     if os.path.exists(csv_path):
-        with open(csv_path, newline='', encoding='utf-8') as csvfile:
+        with open(csv_path, newline='', encoding='cp949') as csvfile:
             reader=csv.DictReader(csvfile)
             for row in reader:
                 keywords.append(row['keyword'])
@@ -42,9 +45,11 @@ def save_sent_articles(site_url_list):
     csv_path = get_csv_path('sent_articles.csv')
     file_exists = os.path.exists(csv_path)
     with open(csv_path, 'a', newline='', encoding='utf-8') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=['sites', 'url'])
+        writer = csv.DictWriter(csvfile, fieldnames=['site', 'url'])
         if not file_exists:
             writer.writeheader()
+        if not site_url_list and not file_exists:
+            return
         for site, url in site_url_list:
             writer.writerow({'site': site, 'url': url})
 
@@ -92,7 +97,7 @@ def is_today_kst(entry):
     if hasattr(entry, 'updated_parsed') and entry.updated_parsed:
         time_struct = entry.updated_parsed
     elif hasattr(entry, 'published_parsed') and entry.published_parsed:
-        time_struct = entry.published.parsed
+        time_struct = entry.published_parsed
     else:
         time_struct = None
     
@@ -120,19 +125,5 @@ def get_final_articles():
 
 
 if __name__ == '__main__':
-    print("오늘 기사 리스트")
-    today_entres = fetch_all_feeds_today()
-    for entry in today_entres:
-        print(f"{entry.title} ({entry.link})")
-
-    
-    print("\n키워드 포함 기사 리스트")
-    filtered = filter_by_keywords(today_entres)
-    for entry in filtered:
-        print(f"{entry.title} ({entry.link})")
-    
-
-    print ("\n 중복 아닌 새 기사 리스트")
-    new_articles, new_sent = filter_new_articles(filtered)
-    for article in new_articles:
-        print(f"{article['title']} ({article['url']})")
+    test = get_final_articles()
+    print(f"최종 결과 : {test}")

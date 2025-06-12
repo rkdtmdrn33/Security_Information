@@ -54,21 +54,9 @@ vmware
 attack
 속보
 log4j
-SKT (AND 장애)
-SKT (AND 유출)
-SKT (AND 마비)
-SKT (AND 먹통)
-SKT (AND 공격)
-KT (AND 장애)
-KT (AND 유출)
-KT (AND 마비)
-KT (AND 먹통)
-KT (AND 공격)
-LG (AND 장애)
-LG (AND 유출)
-LG (AND 마비)
-LG (AND 먹통)
-LG (AND 공격)
+SKT
+KT
+LG
 사칭
 VPN
 위험
@@ -79,7 +67,7 @@ VPN
 Hijacking
 감염
 DNS
-해커 (NOT 우승팀)
+해커
 hacker
 스파이웨어
 Spyware
