@@ -1,4 +1,5 @@
 import smtplib
+import os
 from datetime import datetime
 import json
 from email.mime.multipart import MIMEMultipart
@@ -10,7 +11,10 @@ import news_info.collect_news as collect_news
 current_time = datetime.now()
 formatted_time = current_time.strftime("%Y-%m-%d %H:%M")
 
-with open('config.json', 'r', encoding='utf-8-sig') as f:
+current_dir = os.path.dirname(os.path.abspath(__file__))  # 현재 파일 기준
+filepath = os.path.join(current_dir, 'config.json')
+
+with open(filepath, 'r', encoding='utf-8-sig') as f:
   config = json.load(f)
 
 SMTP_HOST = config['SMTP_HOST']
@@ -75,16 +79,16 @@ def news_html():
   """
   return html_body
 
+def send_mail_news():
+  result = news_html()
+  html_part = MIMEText(result, 'html', _charset='utf-8')
+  msg.attach(html_part)
 
-result = news_html()
-html_part = MIMEText(result, 'html', _charset='utf-8')
-msg.attach(html_part)
+  # 3) SMTP 서버에 연결해서 메일 발송
+  with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as smtp:
+      smtp.ehlo()
+      smtp.starttls()               # TLS 암호화 시작
+      smtp.login(USERNAME, PASSWORD)
+      smtp.send_message(msg)
 
-# 3) SMTP 서버에 연결해서 메일 발송
-with smtplib.SMTP(SMTP_HOST, SMTP_PORT) as smtp:
-    smtp.ehlo()
-    smtp.starttls()               # TLS 암호화 시작
-    smtp.login(USERNAME, PASSWORD)
-    smtp.send_message(msg)
-
-print("메일을 성공적으로 보냈습니다.")
+  print("NEWS 메일을 성공적으로 보냈습니다.")
