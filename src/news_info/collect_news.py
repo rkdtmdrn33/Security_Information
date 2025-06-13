@@ -123,7 +123,3 @@ def get_final_articles():
     save_sent_articles(new_sent)
     return new_articles
 
-
-if __name__ == '__main__':
-    test = get_final_articles()
-    print(f"최종 결과 : {test}")
