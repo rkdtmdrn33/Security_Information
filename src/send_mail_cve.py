@@ -37,7 +37,7 @@ def cve_html(): # CVE HTML
   cve_result = filtered_cve.filtered_cve()
 
   if not cve_result: # Exception handling
-     return 0
+     raise ValueError("CVE 결과가 없어 메일을 보낼 수 없습니다.")
   else:
     cve_rows = []
     for item in cve_result:
