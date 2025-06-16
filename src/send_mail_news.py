@@ -60,7 +60,7 @@ def news_html():
 <body style="margin:0;padding:20px;font-family:Arial, sans-serif;font-size:14px;color:#333;">
   <p style="font-size:20px;">NEWS 기사 확인</p>
   <p style="font-size:13px;">- 총 업데이트 뉴스: {len(news_rows)}건</p>
-  <p style="font-size:13px;">- 업데이트 기준: {formatted_time}</p>
+  <p style="margin-bottom:20px; font-size:13px;">- 업데이트 기준: {formatted_time}</p>
 
   <table style="width:100%;border-collapse:collapse;border:1px solid #000000;">
     <thead>
