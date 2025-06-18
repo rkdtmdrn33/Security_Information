@@ -24,12 +24,14 @@ F5
 방화벽
 시스코
 cisco
+Cisco
 라우터
 취약점
 router
 OpenSSL
 장애
 POC
+PoC
 익스플로잇
 제로데이
 zero-day
@@ -48,8 +50,9 @@ RCE
 critical
 패치
 patch
-vulnerabi
+vulnerability
 vmware
+VM
 공격
 attack
 속보
@@ -92,10 +95,12 @@ bypass
 우회
 SQL
 xss
+XSS
 csrf
+CSRF
 bot
 북한
-north korea
+North Korea
 java
 netgear
 D-link
