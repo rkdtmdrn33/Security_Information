@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 import requests
+import csv
 import json
+import os
 import re
 
 ### --- 모듈 추가 --- ###
@@ -76,8 +78,6 @@ def get_poc():
                 "poc_updated": github_updated_at
             })
 
-        # with open("PoC.json", "w", encoding="utf-8") as f:
-        #     json.dump(poc_json, f,  indent=4, ensure_ascii=False)
     return poc_data
 
 def filter_poc(poc_data): # feed 필터링 부분
@@ -86,9 +86,12 @@ def filter_poc(poc_data): # feed 필터링 부분
 
     for index in poc_data:
         poc_descriptions = index["poc_descriptions"]
+        poc_name = index["poc_name"]
         matches = cve_pattern.findall(poc_descriptions) # CVE 추출
-        
+        matches_name = cve_pattern.findall(poc_descriptions) # CVE 추출
         if not matches:
+            pass
+        elif not matches_name:
             pass
         else:
             poc_result.append({
@@ -101,7 +104,31 @@ def filter_poc(poc_data): # feed 필터링 부분
 
     return poc_result
 
+def filter_new_poc(poc_result, csv_path="csv_data/poc_seen.csv"):
+    seen_names = set()
+
+    # 기존 CSV에서 name 불러오기
+    if os.path.exists(csv_path):
+        with open(csv_path, "r", encoding="utf-8") as f:
+            reader = csv.reader(f)
+            for row in reader:
+                if row:
+                    seen_names.add(row[0])  # 첫 번째 열이 poc_name
+
+    # 새로운 항목 추리기
+    new_results = [item for item in poc_result if item["poc_name"] not in seen_names]
+
+    # 새 항목만 CSV에 저장
+    os.makedirs(os.path.dirname(csv_path), exist_ok=True)
+    with open(csv_path, "a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        for item in new_results:
+            writer.writerow([item["poc_name"]])
+
+    return new_results
+
 def poc_main():
     poc_data = get_poc()
-    result = filter_poc(poc_data)
-    return result
+    poc_result = filter_poc(poc_data)
+    filtered_result = filter_new_poc(poc_result)
+    return filtered_result
