@@ -11,8 +11,10 @@ import news_info.collect_news as collect_news
 current_time = datetime.now()
 formatted_time = current_time.strftime("%Y-%m-%d %H:%M")
 
-current_dir = os.path.dirname(os.path.abspath(__file__))  # 현재 파일 기준
-filepath = os.path.join(current_dir, 'config.json')
+# current_dir = os.path.dirname(os.path.abspath(__file__))  # 현재 파일 기준
+# filepath = os.path.join(current_dir, 'config.json')
+
+filepath = r"C:\Users\NSC4\Desktop\동향메일\Security_Information\src\config.json"
 
 with open(filepath, 'r', encoding='utf-8-sig') as f:
   config = json.load(f)
@@ -35,48 +37,52 @@ msg['Subject'] = SUBJECT
 
 def news_html():
   news_results = collect_news.get_final_articles()
-  news_rows = []
-  for item in news_results:
-      site_change = item['site'].replace('www.','')
-      news_rows.append(f"""
-      <tr>
-        <td style="border:1px solid #000000;padding:8px;font-size:13px;">{item['title']}</td>
-        <td style="border:1px solid #000000;padding:8px;font-size:13px;">
-          <span style="color:#333;text-decoration:none;">{site_change}</span>
-        </td>
-        <td style="border:1px solid #000000;padding:8px;font-size:13px;">
-          <a href="{item['url']}">{item['url']}</a>
-        </td>
-      </tr>
-      """)
 
-  html_body = f"""
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>PoC</title>
-</head>
-<body style="margin:0;padding:20px;font-family:Arial, sans-serif;font-size:14px;color:#333;">
-  <p style="font-size:20px;">NEWS 기사 확인</p>
-  <p style="font-size:13px;">- 총 업데이트 뉴스: {len(news_rows)}건</p>
-  <p style="margin-bottom:20px; font-size:13px;">- 업데이트 기준: {formatted_time}</p>
+  if not news_results: # Exception handling
+     raise ValueError("News 결과가 없어 메일을 보낼 수 없습니다.")
+  else:
+    news_rows = []
+    for item in news_results:
+        site_change = item['site'].replace('www.','')
+        news_rows.append(f"""
+        <tr>
+          <td style="border:1px solid #000000;padding:8px;font-size:13px;">{item['title']}</td>
+          <td style="border:1px solid #000000;padding:8px;font-size:13px;">
+            <span style="color:#333;text-decoration:none;">{site_change}</span>
+          </td>
+          <td style="border:1px solid #000000;padding:8px;font-size:13px;">
+            <a href="{item['url']}">{item['url']}</a>
+          </td>
+        </tr>
+        """)
 
-  <table style="width:100%;border-collapse:collapse;border:1px solid #000000;">
-    <thead>
-      <tr>
-        <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">NEWS TITLE</th>
-        <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">SITE</th>
-        <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">URL</th>
-      </tr>
-    </thead>
-    <tbody>
-      {''.join(news_rows)}
-    </tbody>
-  </table>
-</body>
-</html>
-  """
+    html_body = f"""
+  <!DOCTYPE html>
+  <html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <title>PoC</title>
+  </head>
+  <body style="margin:0;padding:20px;font-family:Arial, sans-serif;font-size:14px;color:#333;">
+    <p style="font-size:20px;">NEWS 기사 확인</p>
+    <p style="font-size:13px;">- 총 업데이트 뉴스: {len(news_rows)}건</p>
+    <p style="margin-bottom:20px; font-size:13px;">- 업데이트 기준: {formatted_time}</p>
+
+    <table style="width:100%;border-collapse:collapse;border:1px solid #000000;">
+      <thead>
+        <tr>
+          <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">NEWS TITLE</th>
+          <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">SITE</th>
+          <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">URL</th>
+        </tr>
+      </thead>
+      <tbody>
+        {''.join(news_rows)}
+      </tbody>
+    </table>
+  </body>
+  </html>
+    """
   return html_body
 
 def send_mail_news():

@@ -12,8 +12,11 @@ from datetime import datetime, timedelta, timezone
 
 def load_keywords_from_csv(): # keywords.csv load
     keywords = []
-    current_dir = os.path.dirname(os.path.abspath(__file__))  # 현재 파일 기준
-    filepath = os.path.join(current_dir, 'csv_data\keywords.csv')
+    # current_dir = os.path.dirname(os.path.abspath(__file__))  # 현재 파일 기준
+    # filepath = os.path.join(current_dir, 'csv_data\keywords.csv')
+
+    filepath = r"C:\Users\NSC4\Desktop\동향메일\Security_Information\src\cve_info\csv_data\keywords.csv"
+    
     with open(filepath, mode='r', encoding='utf-8') as csvfile:
         reader = csv.DictReader(csvfile)  # 첫 줄을 header로 인식
         for row in reader:
@@ -21,6 +24,29 @@ def load_keywords_from_csv(): # keywords.csv load
             if keyword:
                 keywords.append(keyword)
     return keywords
+
+def load_checked_cves():
+    """이미 처리된 CVE 번호 로딩"""
+    filepath = r"C:\Users\NSC4\Desktop\동향메일\Security_Information\src\cve_info\csv_data\cve_check.csv"
+
+    if not os.path.exists(filepath):
+        return set()
+    
+    with open(filepath, mode='r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        return {row['cve_id'] for row in reader if 'cve_id' in row}
+    
+def append_new_cve(cve_id):
+    """새로운 CVE 번호를 CSV에 추가"""
+    filepath = r"C:\Users\NSC4\Desktop\동향메일\Security_Information\src\cve_info\csv_data\cve_check.csv"
+
+    file_exists = os.path.exists(filepath)
+    
+    with open(filepath, mode='a', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=['cve_id'])
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow({'cve_id': cve_id})
 
 def get_time(): # UTC 시간 변환
     seoul_tz = tz.gettz('Asia/Seoul')
@@ -59,10 +85,15 @@ def get_cve(): # CVE 데이터 수집
 def filtered_cve(): # Keywords 기반 CVE 정보 Filtering
     keywords = load_keywords_from_csv()
     cves = get_cve()
+    cve_check = load_checked_cves()
 
     filtered_cves = []
 
     for cve in cves:
+        cve_id = cve.id
+        if cve_id in cve_check:
+            continue
+
         descriptions = cve.descriptions
         matched_keywords = set()
         
@@ -97,19 +128,22 @@ def filtered_cve(): # Keywords 기반 CVE 정보 Filtering
                 'references' : cve.url,
                 'cwe' : [cwe.value for cwe in cve.cwe]
             })
+
+            append_new_cve(cve_id)
+
     return filtered_cves
 
     # 결과 출력
-    # for item in filtered_cves:
-    #     keywords_str = ','.join(k.upper() for k in item['matched_keywords'])
-    #     print("\n======================================================\n")
-    #     print(f"Filtered by [{keywords_str}]\n")
-    #     print(f"{item['id']}\n")
-    #     print(f"published: {item['published']}\n")
-    #     print(f"lastModified: {item['lastModified']}\n")
-    #     print(f"cvssMetricv31: {item['cvssMetricv31']}\n")
-    #     print(f"descriptions: {item['descriptions']}\n")
-    #     print(f"references: {item['references']}\n")
-    #     print(f"CWE: {item['cwe']}")
-    # print(f"\n총 {len(filtered_cves)}개의 CVE가 필터링되었습니다.")    
-    # return
+# filtered_cves = filtered_cve()
+# for item in filtered_cves:
+#     keywords_str = ','.join(k.upper() for k in item['matched_keywords'])
+#     print("\n======================================================\n")
+#     print(f"Filtered by [{keywords_str}]\n")
+#     print(f"{item['id']}\n")
+#     print(f"published: {item['published']}\n")
+#     print(f"lastModified: {item['lastModified']}\n")
+#     print(f"cvssMetricv31: {item['cvssMetricv31']}\n")
+#     print(f"descriptions: {item['descriptions']}\n")
+#     print(f"references: {item['references']}\n")
+#     print(f"CWE: {item['cwe']}")
+# print(f"\n총 {len(filtered_cves)}개의 CVE가 필터링되었습니다.")

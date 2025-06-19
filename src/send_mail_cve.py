@@ -11,8 +11,10 @@ import cve_info.filtered_cve as filtered_cve
 current_time = datetime.now()
 formatted_time = current_time.strftime("%Y-%m-%d %H:%M")
 
-current_dir = os.path.dirname(os.path.abspath(__file__))  # 현재 파일 기준
-filepath = os.path.join(current_dir, 'config.json')
+# current_dir = os.path.dirname(os.path.abspath(__file__))  # 현재 파일 기준
+# filepath = os.path.join(current_dir, 'config.json')
+
+filepath = r"C:\Users\NSC4\Desktop\동향메일\Security_Information\src\config.json"
 
 with open(filepath, 'r', encoding='utf-8-sig') as f:
   config = json.load(f)
@@ -85,7 +87,7 @@ def cve_html(): # CVE HTML
   </body>
   </html>
     """
-    return html_body
+  return html_body
 
 def send_mail_cve():
   result = cve_html()

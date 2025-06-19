@@ -104,7 +104,7 @@ def filter_poc(poc_data): # feed 필터링 부분
 
     return poc_result
 
-def filter_new_poc(poc_result, csv_path="csv_data/poc_seen.csv"):
+def filter_new_poc(poc_result, csv_path=r"C:\Users\NSC4\Desktop\동향메일\Security_Information\src\poc_info\csv_data\poc_seen.csv"):
     seen_names = set()
 
     # 기존 CSV에서 name 불러오기

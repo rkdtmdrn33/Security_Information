@@ -8,5 +8,12 @@ try:
 except ValueError as ve:
     print(f"[SKIP] 메일 전송 생략: {ve}")
 
-send_mail_poc.send_mail_poc()
-send_mail_news.send_mail_news()
+try:
+    send_mail_poc.send_mail_poc()
+except ValueError as ve:
+    print(f"[SKIP] 메일 전송 생략: {ve}")
+
+try:
+    send_mail_news.send_mail_news()
+except ValueError as ve:
+    print(f"[SKIP] 메일 전송 생략: {ve}")

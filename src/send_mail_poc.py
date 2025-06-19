@@ -11,8 +11,10 @@ import poc_info.poc_feed as poc_feed
 current_time = datetime.now()
 formatted_time = current_time.strftime("%Y-%m-%d %H:%M")
 
-current_dir = os.path.dirname(os.path.abspath(__file__))  # 현재 파일 기준
-filepath = os.path.join(current_dir, 'config.json')
+# current_dir = os.path.dirname(os.path.abspath(__file__))  # 현재 파일 기준
+# filepath = os.path.join(current_dir, 'config.json')
+
+filepath = r"C:\Users\NSC4\Desktop\동향메일\Security_Information\src\config.json"
 
 with open(filepath, 'r', encoding='utf-8-sig') as f:
   config = json.load(f)
@@ -33,53 +35,57 @@ msg['Subject'] = SUBJECT
 
 def poc_html(): # POC HTML
   poc_result = poc_feed.poc_main()
-  poc_rows = []
+
+  if not poc_result: # Exception handling
+     raise ValueError("PoC 결과가 없어 메일을 보낼 수 없습니다.")
   
-  for item in poc_result:
-      poc_rows.append(f"""
-      <tr>
-        <td style="border:1px solid #000000;padding:8px;font-size:13px;">{item['poc_name']}</td>
-        <td style="border:1px solid #000000;padding:8px;font-size:13px;">{item['poc_updated']}</td>
-        <td style="border:1px solid #000000;padding:8px;font-size:13px;">{item['poc_descriptions']}</td>
-        <td style="border:1px solid #000000;padding:8px;font-size:13px;">
-          <a href="{item['poc_url']}">{item['poc_url']}</a>
-        </td>
-      </tr>
-      """)
-
-  html_body = f"""
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <title>PoC</title>
-</head>
-<body style="margin:0;padding:20px;font-family:Arial, sans-serif;font-size:14px;color:#333;">
-  <p style="font-size:20px;">Github 신규 업데이트 PoC 보고서</p>
-  <p style="font-size:13px;">- 총 업데이트 PoC: {len(poc_rows)}건</p>
-  <p style="font-size:13px;">- 업데이트 기준: {formatted_time}</p>
-  <p style="margin-bottom:20px; font-size:13px;">
-    <a href="https://github.com/search?q=PoC+CVE&type=repositories" target="_blank" style="color:#0066cc;text-decoration:none;">
-      - GitHub: https://github.com/search?q=PoC+CVE&type=repositories
-    </a>
-  </p>
-
-  <table style="width:100%;border-collapse:collapse;border:1px solid #000000;">
-    <thead>
-      <tr>
-        <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">PoC</th>
-        <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">DATE</th>
-        <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">Descriptions</th>
-        <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">link</th>
-      </tr>
-    </thead>
-    <tbody>
-      {''.join(poc_rows)}
-    </tbody>
-  </table>
-</body>
-</html>
-"""
+  else:
+    poc_rows = []
+    for item in poc_result:
+        poc_rows.append(f"""
+        <tr>
+          <td style="border:1px solid #000000;padding:8px;font-size:13px;">{item['poc_name']}</td>
+          <td style="border:1px solid #000000;padding:8px;font-size:13px;">{item['poc_updated']}</td>
+          <td style="border:1px solid #000000;padding:8px;font-size:13px;">{item['poc_descriptions']}</td>
+          <td style="border:1px solid #000000;padding:8px;font-size:13px;">
+            <a href="{item['poc_url']}">{item['poc_url']}</a>
+          </td>
+        </tr>
+        """)
+  
+    html_body = f"""
+  <!DOCTYPE html>
+  <html lang="ko">
+  <head>
+    <meta charset="UTF-8">
+    <title>PoC</title>
+  </head>
+  <body style="margin:0;padding:20px;font-family:Arial, sans-serif;font-size:14px;color:#333;">
+    <p style="font-size:20px;">Github 신규 업데이트 PoC 보고서</p>
+    <p style="font-size:13px;">- 총 업데이트 PoC: {len(poc_rows)}건</p>
+    <p style="font-size:13px;">- 업데이트 기준: {formatted_time}</p>
+    <p style="margin-bottom:20px; font-size:13px;">
+      <a href="https://github.com/search?q=PoC+CVE&type=repositories" target="_blank" style="color:#0066cc;text-decoration:none;">
+        - GitHub: https://github.com/search?q=PoC+CVE&type=repositories
+      </a>
+    </p>
+  
+    <table style="width:100%;border-collapse:collapse;border:1px solid #000000;">
+      <thead>
+        <tr>
+          <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">PoC</th>
+          <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">DATE</th>
+          <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">Descriptions</th>
+          <th style="border:1px solid #000000;background:#E7E6E6;padding:8px;text-align:center;">link</th>
+        </tr>
+      </thead>
+      <tbody>
+        {''.join(poc_rows)}
+      </tbody>
+    </table>
+  </body>
+  </html>
+  """
   return html_body
 
 

@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 from datetime import datetime, timedelta, timezone
 
 def get_csv_path(filename):
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    BASE_DIR = r"C:\Users\NSC4\Desktop\동향메일\Security_Information\src\news_info"
     csv_dir = os.path.join(BASE_DIR, 'csv_data')
     if not os.path.exists(csv_dir):
         os.makedirs(csv_dir)
