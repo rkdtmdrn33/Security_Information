@@ -42,7 +42,12 @@ def news_html():
      raise ValueError("News 결과가 없어 메일을 보낼 수 없습니다.")
   else:
     news_rows = []
+    seen = set()
     for item in news_results:
+        key = (item['title'], item['url'])
+        if key in seen:
+           continue
+        seen.add(key)
         site_change = item['site'].replace('www.','')
         news_rows.append(f"""
         <tr>
